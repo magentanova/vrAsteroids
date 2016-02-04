@@ -5,8 +5,31 @@ var randBetween = function(min,max) {
   return min + (Math.random() * (max - min))
 }
 
+var fireLaser = function(e) {
+
+  var sphereMesh = new THREE.Mesh( new THREE.SphereGeometry(3,32,32),
+               new THREE.MeshBasicMaterial({ color: 0xFF0000}) )
+
+  var scene = SceneManager.scene,
+         camera = SceneManager.camera ,
+         reticleMagnitude = 50
+
+  scene.add(sphereMesh)
+  var trackCamera = function(reticle) {
+    console.log('reticle & dir')
+    console.log(reticle)
+    var dir = camera.getWorldDirection()
+    console.log(dir)
+    reticleMagnitude += 10
+    reticle.position.x = reticleMagnitude * dir.x
+    reticle.position.y = reticleMagnitude * dir.y
+    reticle.position.z = reticleMagnitude * dir.z
+  }
+  Utils.registerFunction(trackCamera,sphereMesh)
+}
+
 if (Meteor.isClient) {
-  window.THREE = THREE
+  window.addEventListener('click',fireLaser)
   // counter starts at 0
   Template.scene.onRendered(function (){
     window.tem = Template
@@ -19,29 +42,7 @@ if (Meteor.isClient) {
     }
     Utils.animate( [SceneManager, Utils] );
 
-
-    var camera = SceneManager.camera,
-        reticleMagnitude = 100
-
     console.log('all clear')
-
-    var sphereMesh = new THREE.Mesh( new THREE.SphereGeometry(3,32,32),
-               new THREE.MeshBasicMaterial({ color: 0xFF0000}) )
-
-    var scene = SceneManager.scene
-
-    scene.add(sphereMesh)
-    var trackCamera = function(reticle) {
-      console.log('reticle & dir')
-      console.log(reticle)
-      var dir = camera.getWorldDirection()
-      console.log(dir)
-      reticle.position.x = reticleMagnitude * dir.x
-      reticle.position.y = reticleMagnitude * dir.y
-      reticle.position.z = reticleMagnitude * dir.z
-    }
-    Utils.registerFunction(trackCamera,sphereMesh)
-    window.sphereMesh = sphereMesh
   });
 
   function addSphere(scene,props){
