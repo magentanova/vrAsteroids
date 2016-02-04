@@ -37,7 +37,7 @@ if (Meteor.isClient) {
     window.sm = SceneManager
     var n = 0
     while (n < 50) {
-      addSphere(SceneManager.scene,{radius: 10, x:randBetween(-800,800) ,y:randBetween(-900,900),z:randBetween(-900,900)})
+      addSphere(SceneManager.scene,{radius: randBetween(10,30), x:randBetween(-800,800) ,y:randBetween(-900,900),z:randBetween(-900,900)})
       n += 1
     }
     Utils.animate( [SceneManager, Utils] );
